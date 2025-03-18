@@ -1,3 +1,4 @@
+// Task.js
 import "reflect-metadata";
 import { EntitySchema } from "typeorm";
 
@@ -32,7 +33,7 @@ const Task = new EntitySchema({
             default: false
         },
         created_at: {
-            type: "datetime", // Changed from "timestamp" to "datetime"
+            type: "datetime",
             default: () => "CURRENT_TIMESTAMP"
         }
     },
@@ -48,7 +49,13 @@ const Task = new EntitySchema({
             type: "one-to-many",
             inverseSide: "task"
         }
-    }
+    },
+    indices: [
+        { name: "idx_task_project_id", columns: ["project_id"] },
+        { name: "idx_task_is_completed", columns: ["is_completed"] },
+        { name: "idx_task_due_date", columns: ["due_date"] },
+        { name: "idx_task_created_at", columns: ["created_at"] }
+    ]
 });
 
 export default Task;

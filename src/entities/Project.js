@@ -1,3 +1,4 @@
+// Project.js
 import "reflect-metadata";
 import { EntitySchema } from "typeorm";
 
@@ -28,7 +29,7 @@ const Project = new EntitySchema({
             default: false
         },
         created_at: {
-            type: "datetime", // Changed from "timestamp" to "datetime"
+            type: "datetime",
             default: () => "CURRENT_TIMESTAMP"
         }
     },
@@ -49,7 +50,12 @@ const Project = new EntitySchema({
             type: "one-to-many",
             inverseSide: "project"
         }
-    }
+    },
+    indices: [
+        { name: "idx_project_user_id", columns: ["user_id"] },
+        { name: "idx_project_is_favorite", columns: ["is_favorite"] },
+        { name: "idx_project_created_at", columns: ["created_at"] }
+    ]
 });
 
 export default Project;

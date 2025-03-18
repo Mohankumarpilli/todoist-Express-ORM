@@ -10,7 +10,18 @@ const AppDataSource = new DataSource({
     database: "database.sqlite",
     entities: [User, Project, Task, Comment],
     synchronize: true,
-    logging: true
+    // Disable logging in production
+    logging: process.env.NODE_ENV === 'development',
+    // Add connection pooling
+    pool: {
+        max: 10,
+        min: 2,
+        idleTimeoutMillis: 30000
+    },
+    // Add query caching
+    cache: {
+        duration: 30000 // 30 seconds cache
+    }
 });
 
 AppDataSource.initialize()

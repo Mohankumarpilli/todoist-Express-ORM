@@ -1,3 +1,4 @@
+// Comment.js
 import "reflect-metadata";
 import { EntitySchema } from "typeorm";
 
@@ -42,7 +43,12 @@ const Comment = new EntitySchema({
             onDelete: "CASCADE",
             nullable: true
         }
-    }
+    },
+    indices: [
+        { name: "idx_comment_task_id", columns: ["task_id"] },
+        { name: "idx_comment_project_id", columns: ["project_id"] },
+        { name: "idx_comment_posted_at", columns: ["posted_at"] }
+    ]
 });
 
 export default Comment;

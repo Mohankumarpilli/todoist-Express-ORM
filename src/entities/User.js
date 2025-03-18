@@ -1,3 +1,4 @@
+// User.js
 import "reflect-metadata";
 import { EntitySchema } from "typeorm";
 
@@ -27,7 +28,10 @@ const User = new EntitySchema({
             type: "one-to-many",
             inverseSide: "user"
         }
-    }
+    },
+    indices: [
+        { name: "idx_user_email", columns: ["email"] }
+    ]
 });
 
 export default User;
