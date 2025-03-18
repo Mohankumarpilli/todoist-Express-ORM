@@ -1,4 +1,4 @@
-import AppDataSource from "../../database/db.js";
+import AppDataSource from "../database/db.js";
 
 export async function createcomment (req, res) {
     try {
