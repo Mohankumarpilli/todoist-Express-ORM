@@ -1,0 +1,5 @@
+2001  npm init -y
+ 2002  npm install express typeorm sqlite3 reflect-metadata
+ 2003  mkdir src
+ 2004  touch src/server.js src/data-source.js src/entities/User.js
+ 2005  npm run dev
