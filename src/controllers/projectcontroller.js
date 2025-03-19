@@ -1,9 +1,7 @@
 import AppDataSource from "../database/db.js";
 
-// Optimized Project Controller
 export async function getallprojects(req, res) {
     try {
-        // Add pagination
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
@@ -12,16 +10,16 @@ export async function getallprojects(req, res) {
         const [projects, total] = await projectRepository.findAndCount({
             skip,
             take: limit,
-            cache: 30000 // Enable query cache for 30 seconds
+            cache: 30000
         });
         
         res.json({
-            data: projects,
             meta: {
                 total,
                 page,
                 last_page: Math.ceil(total / limit)
-            }
+            },
+            data: projects
         });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -33,7 +31,6 @@ export async function getbyanyid(req, res) {
         const projectRepository = AppDataSource.getRepository("Project");
         let query = projectRepository.createQueryBuilder("project");
 
-        // More efficient query building - avoid date functions when possible
         if (req.query.user_id) {
             query.andWhere("project.user_id = :user_id", { user_id: req.query.user_id });
         }
@@ -44,7 +41,6 @@ export async function getbyanyid(req, res) {
             query.andWhere("project.is_favorite = :is_favorite", { is_favorite: req.query.is_favorite === "true" });
         }
         if (req.query.created_at) {
-            // Store date range values to enable index usage
             const dateValue = req.query.created_at;
             const startDate = new Date(dateValue);
             const endDate = new Date(dateValue);
@@ -54,14 +50,12 @@ export async function getbyanyid(req, res) {
                 { startDate, endDate });
         }
 
-        // Add pagination
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
         
         query.skip(skip).take(limit);
         
-        // Enable query caching
         query.cache(30000);
         
         const [projects, total] = await Promise.all([
@@ -70,12 +64,12 @@ export async function getbyanyid(req, res) {
         ]);
         
         res.json({
-            data: projects,
             meta: {
                 total,
                 page,
                 last_page: Math.ceil(total / limit)
-            }
+            },
+            data: projects
         });
     } catch (error) {
         res.status(500).json({ error: error.message });

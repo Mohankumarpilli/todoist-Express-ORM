@@ -17,7 +17,7 @@ export async function createtask (req, res) {
         res.status(500).json({ error: error.message });
     }
 };
-// Optimized Task Controller
+
 export async function getalltask(req, res) {
     try {
         // Add pagination
@@ -29,7 +29,7 @@ export async function getalltask(req, res) {
         const [tasks, total] = await taskRepository.findAndCount({
             skip,
             take: limit,
-            cache: 30000 // Enable query cache for 30 seconds
+            cache: 30000
         });
         
         res.json({
@@ -60,7 +60,6 @@ export async function getbyanyid(req, res) {
             query.andWhere("task.is_completed = :is_completed", { is_completed: req.query.is_completed === "true" });
         }
         if (req.query.due_date) {
-            // Store date range values to enable index usage
             const dateValue = req.query.due_date;
             const startDate = new Date(dateValue);
             const endDate = new Date(dateValue);
@@ -70,7 +69,6 @@ export async function getbyanyid(req, res) {
                 { startDate, endDate });
         }
         if (req.query.created_at) {
-            // Store date range values to enable index usage
             const dateValue = req.query.created_at;
             const startDate = new Date(dateValue);
             const endDate = new Date(dateValue);
@@ -80,14 +78,12 @@ export async function getbyanyid(req, res) {
                 { startDate, endDate });
         }
 
-        // Add pagination
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
         
         query.skip(skip).take(limit);
         
-        // Enable query caching
         query.cache(30000);
         
         const [tasks, total] = await Promise.all([

@@ -8,17 +8,19 @@ import commentRoutes from "./routes/commentRoutes.js";
 
 const app = express();
 
-// Add compression for response payload
-app.use(compression());
+// // Add compression for response payload
+// app.use(compression());
 
-// Add security headers
-app.use(helmet());
+// // Add security headers
+// app.use(helmet());
 
-// Increase payload size limit if needed
-app.use(json({ limit: '1mb' }));
+// // Increase payload size limit if needed
+// app.use(json({ limit: '1mb' }));
+
+app.use(json());
 
 // Add API version prefix
-const API_PREFIX = '/api/v1';
+const API_PREFIX = '/api';
 
 // Mount routes
 app.use(API_PREFIX, userRoutes);
